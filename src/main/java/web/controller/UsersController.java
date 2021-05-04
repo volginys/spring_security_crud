@@ -4,32 +4,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import web.model.Role;
 import web.model.User;
+import web.service.RoleService;
 import web.service.UserService;
 
 import java.security.Principal;
 import java.util.Arrays;
 import java.util.List;
-
+import java.util.Set;
 
 @Controller
 public class UsersController {
-
     @Autowired
     private UserService userService;
+    @Autowired
+    private RoleService roleService;
 
-    @GetMapping("/")
-    public String getIndex(Model model, Principal principal) {
-        String username = principal.getName();
-        User user = userService.findByEmail(username);
-        model.addAttribute("user", user);
-        return "index";
-    }
     @GetMapping("/user")
     public String getUserPage(Model model, Principal principal) {
         String username = principal.getName();
-        User user = userService.findByEmail(username);
-        model.addAttribute("user", user);
+        model.addAttribute("user", userService.findByEmail(username));
         return "user";
     }
 
@@ -39,15 +34,16 @@ public class UsersController {
     }
 
     @GetMapping("/admin")
-    public String ind(Model model){
-        List<User> users = userService.getAllUsers();
-        model.addAttribute("users", users);
-        return "/users/index";
+    public String index(Model model){
+        model.addAttribute("users", userService.getAllUsers());
+        model.addAttribute("roleSet", roleService.getAllRoles());
+        return "/admin/index";
     }
     @GetMapping("/admin/new")
-    public String newCar(Model model){
+    public String newUser(Model model){
+        model.addAttribute("roleSet", roleService.getAllRoles());
         model.addAttribute("user", new User());
-        return "/users/new";
+        return "/admin/new";
     }
 
     @PostMapping("/admin")
@@ -58,28 +54,26 @@ public class UsersController {
 
     @GetMapping("/admin/{id}")
     public String show(Model model, @PathVariable("id") Long id){
-        User user = userService.findById(id);
-        model.addAttribute("users", Arrays.asList(user));
-        return "/users/index";
+        model.addAttribute("users", Arrays.asList(userService.findById(id)));
+        return "/admin/index";
     }
 
     @GetMapping("/admin/{id}/edit")
     public String edit(Model model, @PathVariable("id") Long id){
-        User user = userService.findById(id);
-        model.addAttribute("user", user);
-        return "/users/edit";
+        model.addAttribute("roleSet", roleService.getAllRoles());
+        model.addAttribute("user", userService.findById(id));
+        return "/admin/edit";
     }
 
-    @PatchMapping("/admin/{id}")
-    public String update(@ModelAttribute("user") User user, @PathVariable("id") Long id){
-        userService.updateById(id, user);
+    @PostMapping("/admin/edit/{id}")
+    public String update(@ModelAttribute("user") User user){
+        userService.update(user);
         return "redirect:/admin";
     }
 
-    @DeleteMapping("/admin/{id}")
+    @GetMapping("/admin/delete/{id}")
     public String delete(@PathVariable("id") Long id){
         userService.delete(id);
         return "redirect:/admin";
     }
-
 }

@@ -4,9 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <title></title>
-
 </head>
 <body>
+<form th:action="@{/logout}" method="post">
+    <button type="submit">Sign Out</button>
+</form>
+<div>
+    <h1>ADMIN PAGE</h1>
+</div>
 <div th:if="${not #lists.isEmpty(users)}">
     <table class="table table-striped">
         <tr>
@@ -14,18 +19,25 @@
             <th>FirstName    </th>
             <th>LastName    </th>
             <th>Email    </th>
+            <th>Password    </th>
+            <th>Roles    </th>
         </tr>
         <tr th:each="user :${users}">
             <td th:text="${user.getId()}   "></td>
             <td th:text="${user.getFirstName()}   "></td>
             <td th:text="${user.getLastName()}   "></td>
             <td th:text="${user.getEmail()}   "></td>
+            <td th:text="${user.getPassword()}   "></td>
+            <td th:text="${user.getRoles()}"></td>
             <td>
                 <a th:href="@{/admin/{id}/edit(id=${user.getId()})}" th:text="Edit">user</a>
             </td>
         </tr>
     </table>
 </div>
-<a href="/admin/new">Create new user</a>
+<form th:action="@{/admin/new}" method="get">
+    <button type="submit">Create new user</button>
+</form>
+
 </body>
 </html>

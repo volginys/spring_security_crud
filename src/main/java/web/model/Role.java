@@ -3,6 +3,7 @@ package web.model;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -12,17 +13,13 @@ public class Role implements GrantedAuthority {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @Column(name = "role")
-    private String role;
+    @Column(name = "name")
+    private String name;
     @ManyToMany(fetch = FetchType.EAGER, mappedBy = "roles")
     private Set<User> users;
 
     public Role(){
 
-    }
-    public Role(Long id, String role) {
-        this.id = id;
-        this.role = role;
     }
 
     public Long getId() {
@@ -33,16 +30,35 @@ public class Role implements GrantedAuthority {
         this.id = id;
     }
 
-    public String getRole() {
-        return role;
+    public String getName() {
+        return name;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
     public String getAuthority() {
-        return role;
+        return name;
+    }
+
+    @Override
+    public String toString(){
+       return getName();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Role role = (Role) o;
+        return id.equals(role.id) &&
+                role.equals(role.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name);
     }
 }

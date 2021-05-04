@@ -1,10 +1,12 @@
 package web.dao;
 
 import web.model.Role;
+import java.util.Set;
+
 
 public interface RoleDAO {
 
-    Role findById(Long id);
+    Set<Role> getAllRoles();
 
-    Role findByRole(String role);
+    Role findRoleById(Long id);
 }

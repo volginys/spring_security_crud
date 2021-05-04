@@ -4,6 +4,7 @@ import web.model.User;
 
 import java.util.List;
 
+
 public interface UserDAO {
 
     void add(User user);
@@ -14,9 +15,7 @@ public interface UserDAO {
 
     User findByEmail(String email);
 
-    void update(Long id, User user);
+    void update(User user);
 
     void delete(Long id);
-
-
 }

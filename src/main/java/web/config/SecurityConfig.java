@@ -1,15 +1,11 @@
 package web.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.authentication.configuration.EnableGlobalAuthentication;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -37,7 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        http.formLogin()
+        http  .formLogin()
                 .loginPage("/login")
                 .successHandler(loginSuccessHandler)
                 .loginProcessingUrl("/login")
@@ -45,17 +41,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .passwordParameter("j_password")
                 .permitAll();
 
-        http.logout()
+        http  .logout()
                 .permitAll()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/login?logout");
 
         http  .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/").authenticated()
                 .antMatchers("/login").anonymous()
-                .antMatchers("/user/**").access("hasAnyAuthority('user')")
-                .antMatchers("/admin/**").access("hasAnyAuthority('admin')")
+                .antMatchers("/user**").access("hasAnyAuthority('user','admin')")
+                .antMatchers("/admin**").access("hasAuthority('admin')")
                 .anyRequest().authenticated();
     }
 

@@ -1,31 +1,30 @@
 package web.dao;
 
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import web.model.Role;
-import javax.persistence.TypedQuery;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Repository
 public class RoleDAOImpl implements RoleDAO{
 
-    @Autowired
-    private SessionFactory sessionFactory;
+    @PersistenceContext
+    private EntityManager entityManager;
 
-    @SuppressWarnings("unchecked")
-    @Transactional(readOnly = true)
     @Override
-    public Role findById(Long id) {
-        return sessionFactory.getCurrentSession().find(Role.class, id);
+    public Set<Role> getAllRoles() {
+        return entityManager.createQuery("from Role", Role.class)
+                .getResultList().stream()
+                .collect(Collectors.toCollection(HashSet::new));
     }
 
-    @SuppressWarnings("unchecked")
-    @Transactional(readOnly = true)
     @Override
-    public Role findByRole(String role) {
-        TypedQuery<Role> query=sessionFactory.getCurrentSession().createQuery("from Role where role =:role")
-                .setParameter("role", role );
-        return query.getResultList().stream().findFirst().get();
+    public Role findRoleById(Long id) {
+        return entityManager.find(Role.class, id);
     }
 }

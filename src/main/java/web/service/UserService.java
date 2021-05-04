@@ -1,7 +1,6 @@
 package web.service;
 
 import web.model.User;
-
 import java.util.List;
 
 public interface UserService {
@@ -10,7 +9,7 @@ public interface UserService {
 
     List<User> getAllUsers();
 
-    void updateById(Long id, User user);
+    void update(User user);
 
     User findById(Long id);
 

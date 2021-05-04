@@ -6,8 +6,13 @@
     <title></title>
 </head>
 <body>
-
-<form th:method="POST" th:action="@{/admin}" th:object="${user}">
+<form th:action="@{/logout}" method="post">
+    <button type="submit">Sign Out</button>
+</form>
+<div>
+    <h1>ADMIN: CREATE PAGE</h1>
+</div>
+<form action="#" method="POST" th:action="@{/admin}" th:object="${user}">
     <label for="firstname">Enter first name: </label>
     <input type="text" th:field="*{firstName}" id="firstname"/>
     <br/>
@@ -21,7 +26,14 @@
     <input type="text" th:field="*{password}" id="password"/>
     <br/>
     <input type="submit" value="Create!"/>
+    <ul>
+        <li th:each="role : ${roleSet}">
+            <div>
+                <input type="checkbox" th:field="*{roles}" th:value="${role.id}">
+                <label th:text="${role.name}"></label>
+            </div>
+        </li>
+    </ul>
 </form>
-
 </body>
 </html>
