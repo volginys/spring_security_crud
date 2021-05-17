@@ -27,7 +27,7 @@
     <input type="text" th:field="*{password}" id="password"/>
     <br/>
     <ul>
-        <li th:each="role : ${roleSet}">
+        <li multiple th:each="role : ${roleSet}">
             <div>
                 <input type="checkbox" th:field="*{roles}" th:value="${role.id}" >
                 <label th:text="${role.name}"></label>

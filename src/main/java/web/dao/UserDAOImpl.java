@@ -5,6 +5,7 @@ import web.model.User;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Repository
@@ -20,18 +21,21 @@ public class UserDAOImpl implements UserDAO{
 
     @Override
     public List<User> getAllUsers() {
-        return entityManager.createQuery("from User",User.class).getResultList();
+        return entityManager.createQuery("FROM User as u LEFT JOIN FETCH u.roles",User.class).getResultList()
+                .stream().distinct().collect(Collectors.toList());
     }
 
     @Override
     public User findById(Long id) {
-        return entityManager.find(User.class, id);
+        return entityManager
+                .createQuery("from User as u LEFT JOIN FETCH u.roles where u.id =:id ",User.class)
+                .setParameter("id", id ).getSingleResult();
     }
 
     @Override
     public User findByEmail(String email) {
         return entityManager
-                .createQuery("from User where email =:email",User.class)
+                .createQuery("from User as u LEFT JOIN FETCH u.roles where u.email =:email",User.class)
                 .setParameter("email", email ).getSingleResult();
     }
 
