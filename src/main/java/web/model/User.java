@@ -21,7 +21,7 @@ public class User implements UserDetails {
     private String lastName;
     @Column(name = "password")
     private String password;
-    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private Set<Role> roles;
 
     public User() {}
