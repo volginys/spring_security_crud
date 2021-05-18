@@ -5,14 +5,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import web.dao.RoleDAO;
 import web.model.Role;
-
 import java.util.Set;
 
 @Service
 public class RoleServiceImpl implements RoleService {
 
-    @Autowired
     private RoleDAO roleDao;
+
+    public RoleServiceImpl(@Autowired RoleDAO roleDao) {
+        this.roleDao = roleDao;
+    }
 
     @SuppressWarnings("unchecked")
     @Transactional(readOnly = true)

@@ -5,14 +5,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.env.Environment;
 import org.springframework.format.FormatterRegistry;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.orm.hibernate5.HibernateTransactionManager;
-import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
-
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -22,22 +15,21 @@ import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 import web.config.formatter.RoleStringConverter;
 import web.config.formatter.StringRoleConverter;
 import web.model.Role;
-import web.model.User;
-
-import javax.sql.DataSource;
-import java.util.Properties;
 
 @Configuration
 @EnableWebMvc
 @ComponentScan("web")
 public class WebConfig implements WebMvcConfigurer {
-    @Autowired
-    private RoleStringConverter roleStringConverter;
-    @Autowired
-    private StringRoleConverter stringRoleConverter;
-    private final ApplicationContext applicationContext;
 
-    public WebConfig(ApplicationContext applicationContext) {
+    private final ApplicationContext applicationContext;
+    private RoleStringConverter roleStringConverter;
+    private StringRoleConverter stringRoleConverter;
+
+    public WebConfig(@Autowired RoleStringConverter roleStringConverter,
+                     @Autowired StringRoleConverter stringRoleConverter,
+                     ApplicationContext applicationContext) {
+        this.roleStringConverter = roleStringConverter;
+        this.stringRoleConverter = stringRoleConverter;
         this.applicationContext = applicationContext;
     }
 

@@ -7,7 +7,6 @@ import javax.persistence.PersistenceContext;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 @Repository
 public class UserDAOImpl implements UserDAO{
 
@@ -28,14 +27,14 @@ public class UserDAOImpl implements UserDAO{
     @Override
     public User findById(Long id) {
         return entityManager
-                .createQuery("from User as u LEFT JOIN FETCH u.roles where u.id =:id ",User.class)
+                .createQuery("FROM User as u LEFT JOIN FETCH u.roles WHERE u.id =:id ",User.class)
                 .setParameter("id", id ).getSingleResult();
     }
 
     @Override
     public User findByEmail(String email) {
         return entityManager
-                .createQuery("from User as u LEFT JOIN FETCH u.roles where u.email =:email",User.class)
+                .createQuery("FROM User as u LEFT JOIN FETCH u.roles WHERE u.email =:email",User.class)
                 .setParameter("email", email ).getSingleResult();
     }
 

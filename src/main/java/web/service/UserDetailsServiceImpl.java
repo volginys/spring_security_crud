@@ -10,8 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    @Autowired
     private UserService userService;
+
+    public UserDetailsServiceImpl(@Autowired UserService userService) {
+        this.userService = userService;
+    }
 
     @SuppressWarnings("unchecked")
     @Transactional(readOnly = true)

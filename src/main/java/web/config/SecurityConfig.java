@@ -20,10 +20,14 @@ import web.config.handler.LoginSuccessHandler;
 @ComponentScan("web")
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
     private UserDetailsService userDetailsService;
-    @Autowired
     private LoginSuccessHandler loginSuccessHandler;
+
+    public SecurityConfig(@Autowired UserDetailsService userDetailsService,
+                          @Autowired LoginSuccessHandler loginSuccessHandler) {
+        this.userDetailsService = userDetailsService;
+        this.loginSuccessHandler = loginSuccessHandler;
+    }
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -33,21 +37,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        http  .formLogin()
-                .loginPage("/login")
+        http  .formLogin() .loginPage("/login")
                 .successHandler(loginSuccessHandler)
                 .loginProcessingUrl("/login")
-                .usernameParameter("j_username")
-                .passwordParameter("j_password")
+                .usernameParameter("username")
+                .passwordParameter("password")
                 .permitAll();
 
         http  .logout()
                 .permitAll()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessUrl("/login?logout");
+                .logoutSuccessUrl("/");
 
         http  .csrf().disable()
                 .authorizeRequests()
+                .antMatchers("/").permitAll()
                 .antMatchers("/login").anonymous()
                 .antMatchers("/user**").access("hasAnyAuthority('user','admin')")
                 .antMatchers("/admin**").access("hasAuthority('admin')")
